@@ -70,7 +70,7 @@ with st.form("my_form"):
         dfs = list()
         for spend_file in spends:
             wb = load_workbook(spend_file, read_only=True)
-            selected_sheets = st.multiselect(spend_file.name, wb.sheetnames, ["ABRIL"])
+            selected_sheets = st.multiselect(spend_file.name, wb.sheetnames, [])
 
             use_columns = [0, 1, 2, 3]
             for selected_sheet in selected_sheets:
@@ -92,21 +92,23 @@ with st.form("my_form"):
         )
 
         df = pd.DataFrame(
-            [x.to_present() for x in payment_verifier.payment_report.payments]
+            [x.to_present() for x in payment_verifier.payment_report.payments],
+            columns=["Data pagamento", "Lançamento", "Total", "Validado", "Planilha"],
         )
 
         if not_verified_only:
             df.query("Validado == False", inplace=True)
 
         df = df.style.format(precision=2, thousands=".", decimal=",")
-        payments_expander.dataframe(df, hide_index=True)
+        payments_expander.dataframe(df, use_container_width=True, hide_index=True)
 
         debit_expander = st.expander("Débitos", expanded=True)
         not_verified_only = debit_expander.checkbox(
             "Mostrar somente débitos não verificados.", value=True
         )
         df = pd.DataFrame(
-            [x.to_present() for x in payment_verifier.expense_report.expenses]
+            [x.to_present() for x in payment_verifier.expense_report.expenses],
+            columns=["Data", "Lançamento", "Total", "Validado", "Planilha"],
         )
 
         if not_verified_only:
