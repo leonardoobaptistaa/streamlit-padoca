@@ -53,16 +53,14 @@ def create_expense_dataframe(file):
 
 
 with st.form("my_form"):
-    st.write(
-        "Escolha primeiro o extrato do banco e depois um ou mais arquivos de despesas."
-    )
-    bank_report = st.file_uploader("Extrato do banco")
+    st.write("Escolha primeiro o extrato e depois um ou mais arquivos de despesas.")
+    bank_report = st.file_uploader("Extrato")
     spends = st.file_uploader("Arquivo(s) de despesas", accept_multiple_files=True)
 
     submitted = st.form_submit_button("Comparar")
     if submitted:
         if not bank_report:
-            st.warning("Está faltando o arquivo de extrato do banco.", icon="⚠️")
+            st.warning("Está faltando o arquivo de extrato.", icon="⚠️")
 
         if not spends:
             st.warning("Está faltando arquivo(s) de despesas.", icon="⚠️")
